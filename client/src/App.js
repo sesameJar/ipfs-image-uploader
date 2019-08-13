@@ -51,19 +51,6 @@ class App extends Component {
     }
   };
 
-  // runExample = async () => {
-  //   const { accounts, contract } = this.state;
-
-  //   // Stores a given value, 5 by default.
-  //   await contract.methods.set(5).send({ from: accounts[0] });
-
-  //   // Get the value from the contract to prove it worked.
-  //   const response = await contract.methods.get().call();
-
-  //   // Update state with the result.
-  //   this.setState({ storageValue: response });
-  // };
-
   captureFile = (event) =>{
     event.preventDefault();
     
@@ -80,13 +67,9 @@ class App extends Component {
 
   onSubmit = async (event) => {
     event.preventDefault();
-  
-  //save document to IPFS,return its hash#, and set hash# to state
-  //  
-  const results = await ipfs.add(this.state.buffer) 
-  console.log(results)//await ipfs.add 
-  }; //onSubmit
-
+    const results = await ipfs.add(this.state.buffer)
+    this.setState({ipfsHash : results[0].hash})
+  };
 
   render() {
     if (!this.state.web3) {
@@ -96,7 +79,7 @@ class App extends Component {
       <div className="App">
         <h1>IPFS FILE UPLOAD</h1>
         <p>This image is stored on IPFS and Ethereum blockchain</p>
-        <img src="" alt="" />
+        <img src={`https://ipfs.io/ipfs/${this.state.ipfsHash}`} alt="" />
         <h2>Upload Image</h2>
         <form onSubmit={this.onSubmit}>
           <input type="file" onChange={this.captureFile} />
